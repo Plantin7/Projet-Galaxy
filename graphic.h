@@ -9,5 +9,6 @@
 void create_window();
 void draw_body(body *B);
 void draw_black_filled_rectangle();
-void update();
+void update_window();
 void wait_milliseconds(int value);
+void free_window();

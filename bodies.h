@@ -14,12 +14,11 @@ typedef struct _body {
     double mass; /* mass */
 } body;
 
-double distance(body body_1, body body_2, double* dx, double* dy);
 
-double gravitational_force(double masse_1, double masse_2, double d, double dist);
+body* create_body(double px, double py, double vx, double vy, double mass);
 
-double velocity(double delt, double force, double mass);
+void update_body(body* B1, body* B2, double delt);
 
-double position (double delt, double velocity);
+void free_body(body* body);
 
 #endif
