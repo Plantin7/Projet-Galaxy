@@ -5,11 +5,19 @@ void create_window() {
     MLV_create_window("Window", "Window", WINDOW_WIDTH, WINDOW_HEIGHT);
 }
 
-void draw_body(body *B) {
-    int window_x = WINDOW_WIDTH*(0.5+0.5*(B->px/WIDTH_OF_REGION));
-    int window_y = WINDOW_HEIGHT*(0.5+0.5*(B->py/WIDTH_OF_REGION));
+void draw_body(body *B, int width_region) {
+    int window_x = WINDOW_WIDTH*(0.5+0.5*(B->px/ width_region));
+    int window_y = WINDOW_HEIGHT*(0.5+0.5*(B->py/ width_region));
 
-    MLV_draw_filled_circle(window_x, window_y, 10, MLV_COLOR_WHITE);
+    MLV_draw_filled_circle(window_x, window_y, 0.8, MLV_COLOR_WHITE);
+}
+
+void draw_galaxy(galaxy* new_galaxy){
+	body* current = new_galaxy->body;
+	while(current != NULL){
+		draw_body(current, new_galaxy->width_region / 2);
+		current = current->next;
+	}
 }
 
 void draw_black_filled_rectangle() {
