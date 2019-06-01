@@ -1,4 +1,4 @@
-#include "graphic.h"
+#include "../header/graphic.h"
 
 
 void create_window() {

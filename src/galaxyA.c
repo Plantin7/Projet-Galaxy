@@ -1,8 +1,8 @@
 #include <stdio.h>
 
-#include "bodies.h"
-#include "graphic.h"
-#include "in_out.h"
+#include "../header/bodies.h"
+#include "../header/graphic.h"
+#include "../header/in_out.h"
 
 int main(int argc, char* argv[]){
 
@@ -13,6 +13,7 @@ int main(int argc, char* argv[]){
     	fprintf(stderr, "Il me faut une galaxy ! (Vous pouvez les trouver dans le dossier data/ )\n");
     	return 0;
     }
+    
     galaxy* new_galaxy = galaxy_import(argv[1]);
 
     double t = 0.0;

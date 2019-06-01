@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include "bodies.h"
+#include "../header/bodies.h"
 
 /*create Body*/
 body* create_body(double px, double py, double vx, double vy, double mass){

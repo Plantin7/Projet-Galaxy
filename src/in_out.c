@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "in_out.h"
+#include "../header/in_out.h"
 
 galaxy* galaxy_import(const char* file){
   FILE* f;
