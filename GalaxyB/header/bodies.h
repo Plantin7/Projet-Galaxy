@@ -13,13 +13,13 @@ typedef struct _body {
     double fx;   /* x force */
     double fy;   /* y force */
     double mass; /* mass */
-   struct _body* next;
+   /*struct _body* next;*/
 } body;
 
 typedef struct _galaxy {
-	int number_body;      /*Number of body in file*/
-	double width_region;  /*witdth of the region*/
-	body* body;       /*Array of body*/
+    int number_body;      /*Number of body in file*/
+    double width_region;  /*witdth of the region*/
+    body** body;       /*Array of body*/
 } galaxy;
 
 body* create_body(double px, double py, double vx, double vy, double mass);

@@ -19,7 +19,7 @@ body* create_body(double px, double py, double vx, double vy, double mass){
     new_body->fx = 0.0;
     new_body->fy = 0.0;
 
-    new_body->next = NULL;
+    /*new_body->next = NULL;*/
 
     return new_body;
 }
@@ -28,7 +28,8 @@ galaxy* create_galaxy(int number_body, double width_region){
     galaxy* new_galaxy = (galaxy*)malloc(sizeof(galaxy));
     new_galaxy->number_body = number_body;
     new_galaxy->width_region = width_region;
-    new_galaxy->body = NULL;
+    /*new_galaxy->body = NULL;*/
+    new_galaxy->body = (body**)malloc(number_body*sizeof(body*));
 
     return new_galaxy;
 }
@@ -46,18 +47,19 @@ double distance(body* B1, body* B2, double* dx, double* dy){
     *dx = B1->px - B2->px;
     *dy = B1->py - B2->py;
 
-    return sqrt((*dx) * (*dx) + (*dy) * (*dy)); /* distance between body_1 and body_2 */
+    return sqrt(((*dx) * (*dx)) + ((*dy) * (*dy))); /* distance between body_1 and body_2 */
 }
 
 /* compute the gravitational force acting on B1 from B2 */
 
 void compute_gravitational_force(body* B1, body* B2) {
-    double dx, dy, dist;
+    double dx = B2->px - B1->px;
+    double dy = B2->py - B1->py;
 
-    dist = distance(B2, B1, &dx, &dy);
+    double dist = sqrt(dx*dx +dy*dy);
 
-    B1->fx = (G * B1->mass * B2->mass/ (dist*dist+(C*C)))*(dx/dist); 
-    B1->fy = (G * B1->mass * B2->mass/ (dist*dist+(C*C)))*(dy/dist); 
+    B1->fx += (G * B1->mass * B2->mass/ (dist*dist+(C*C)))*(dx/dist); 
+    B1->fy += (G * B1->mass * B2->mass/ (dist*dist+(C*C)))*(dy/dist); 
 
     /*dist = distance(B1, B2, &dx, &dy);
 
@@ -68,23 +70,30 @@ void compute_gravitational_force(body* B1, body* B2) {
 /* compute bodies's new velocity */
 void compute_velocity(body* B, double delt) {
 
-    B->vx += (delt * B->fx / B->mass);
-    B->vy += (delt * B->fy / B->mass);
+    B->vx += (delt * B->fx) / B->mass;
+    B->vy += (delt * B->fy) / B->mass;
 }
 
 /* compute bodies's new position */
 void compute_position (body* B, double delt) {
     compute_velocity(B, delt);
-    B->px += (delt* B->vx);
-    B->py += (delt* B->vy);
+    B->px += delt* B->vx;
+    B->py += delt* B->vy;
 }
 
 void free_galaxy(galaxy* new_galaxy){
-    galaxy* current = new_galaxy;
+    /*galaxy* current = new_galaxy;
     while(current->body != NULL){
         new_galaxy->body = new_galaxy->body->next;
         free_body(current->body);
+    }*/
+
+    for (int i = 0; i < new_galaxy->number_body; i++){
+        free_body(new_galaxy->body[i]);
     }
+
+    free(new_galaxy->body);
+    free(new_galaxy);
 }
 
 void free_body(body* body){
