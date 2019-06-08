@@ -20,3 +20,4 @@ void free_window();
 
 void draw_region(Region r, int width_region);
 void draw_quadtree(Quad* qt, int width_region);
+void draw_whole_quadtree(Quad*qt, int width_region);

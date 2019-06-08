@@ -13,15 +13,9 @@ void draw_body(body *B, int width_region) {
 }
 
 void draw_galaxy(galaxy* new_galaxy){
-	/*body* current = new_galaxy->body;
-	while(current != NULL){
-		draw_body(current, new_galaxy->width_region / 2);
-		current = current->next;
-	}*/
 	for (int i = 0; i < new_galaxy->number_body; i++){
         draw_body(new_galaxy->body[i], new_galaxy->width_region / 2);
     }
-
 }
 
 void draw_black_filled_rectangle() {
@@ -49,8 +43,20 @@ void draw_region(Region r, int width_region){
 }
 
 void draw_quadtree(Quad* qt, int width_region){
+
 	draw_region(qt->quad_NW->region, width_region);
 	draw_region(qt->quad_NE->region, width_region);
 	draw_region(qt->quad_SW->region, width_region);
 	draw_region(qt->quad_SE->region, width_region);
+}
+
+void draw_whole_quadtree(Quad*qt, int width_region){
+	if (qt->quad_NW != NULL && qt->quad_NE != NULL && qt->quad_SW != NULL && qt->quad_SE != NULL){
+	draw_quadtree(qt, width_region);
+
+	draw_whole_quadtree(qt->quad_NW, width_region);
+	draw_whole_quadtree(qt->quad_NE, width_region);
+	draw_whole_quadtree(qt->quad_SW, width_region);
+	draw_whole_quadtree(qt->quad_SE, width_region);
+	}
 }

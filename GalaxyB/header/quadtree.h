@@ -6,7 +6,7 @@
 typedef struct _point{
 	double x;
 	double y;
-}Point;
+}Point, *Center_mass;
 
 
 typedef struct _region {
@@ -45,26 +45,6 @@ Region quad_NE(Region r);
 Region quad_SW(Region r);
 Region quad_SE(Region r);
 
-
 void free_quad(Quad* qt);
-
-/*
-
-on va avoir : 
-- une fonction de creation
-- une foncton insert
-- une fonction de recherche
-- une fonction d'extraction
-- une structure region qui represente une region rectangulaire
-- une fonction de creation d'un quadrant, (region quad_NW(region R))
-- une fonction pour savoir si un corps est dans une région (is_in_region(region r, body B))
-
-
-un noeud contiendra une région, et un pointeur sur un corps ainsi que des pointeurs sur ses quatres fils
-si c'est une feuille, le corps 
-
-
-
-*/
 
 #endif

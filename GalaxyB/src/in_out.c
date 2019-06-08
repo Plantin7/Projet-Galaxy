@@ -28,12 +28,7 @@ galaxy* galaxy_import(const char* file){
 
   for (int i = 0; i < number_body; i++) {
     fscanf(f,"%lf %lf %lf %lf %lf", &px, &py, &vx, &vy, &mass);
-    /*printf("i %d------%lf %lf %lf %lf %lf \n", i, px, py, vx, vy, mass);*/
-
     new_galaxy->body[i] = create_body(px, py, vx, vy, mass);
-    /*body* new_body = create_body(px, py, vx, vy, mass);
-    new_body->next = new_galaxy->body;
-    new_galaxy->body= new_body;*/
 
   }
   fclose(f);

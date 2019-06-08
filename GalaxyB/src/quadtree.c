@@ -12,7 +12,7 @@ Quad* create_quad(Region r){
 	new_quad->body = NULL;
 
 	new_quad->mass = 0;
-	new_quad->center_mass = create_point(0, 0);/*create_point((r.topLeft.x + r.bottomRight.x) / 2, (r.topLeft.y + r.bottomRight.y)/ 2);*/
+	new_quad->center_mass = create_point(0,0);
 
 	new_quad->quad_NW = NULL;
 	new_quad->quad_NE = NULL;
@@ -65,17 +65,20 @@ int is_leaf(Quad* qt){
 }
 
 void insert_quad(Quad* qt, body* b){
-	/*if(b == NULL){
+	if(b == NULL){
 		return;
 	}
 	if(!is_in_region(qt->region, *b)){
 		return;
-	}*/
+	}
 
 	if(!is_leaf(qt)){
 		double new_mass = qt->mass + b->mass;
-		qt->center_mass = create_point((qt->center_mass.x * qt->mass + b->px * b->mass)/new_mass, 
-									   (qt->center_mass.y * qt->mass + b->py * b->mass)/new_mass);
+		double tmp_x = ((qt->center_mass.x * qt->mass) + (b->px * b->mass))/new_mass;
+		double tmp_y = ((qt->center_mass.y * qt->mass) + (b->py * b->mass))/new_mass;
+		qt->center_mass.x = tmp_x;
+		qt->center_mass.y = tmp_y;
+		qt->mass = new_mass;
 		insert_quad(search_quad(qt, b), b);
 	}
 	else {
@@ -87,16 +90,15 @@ void insert_quad(Quad* qt, body* b){
 			qt->quad_NE = create_quad(quad_NE(qt->region));
 			qt->quad_SW = create_quad(quad_SW(qt->region));
 			qt->quad_SE = create_quad(quad_SE(qt->region));
-
-			draw_quadtree(qt, 2.83800e+06);
-
-			body* c = qt->body;
-			qt->body = NULL;
+			
 			qt->mass = 0.0;
-			qt->center_mass = create_point(0.0, 0.0);
+			qt->center_mass.x = 0.0;
+			qt->center_mass.y = 0.0;
 
 			insert_quad(qt, b);
-			insert_quad(qt, c);
+			insert_quad(qt, qt->body);
+			qt->body = NULL;
+			
 		}
 	}
 }
@@ -111,46 +113,41 @@ Quad* search_quad(Quad* qt, body* b){
 	if(is_in_region(qt->quad_SW->region, *b)){
 		return qt->quad_SW;
 	}
-	else {
+	if(is_in_region(qt->quad_SE->region, *b)){
 		return qt->quad_SE;
 	}
+	return NULL;
 }
 
 double compute_distance(Point center_mass, body* b) {
-	double x = b->px - center_mass.x;
-	double y = b->py - center_mass.y;
-	return sqrt(x*x + y*y);
-}
+	double x = center_mass.x - b->px ;
+	double y = center_mass.y - b->py ;
 
+	return sqrt((x*x) + (y*y));
+}
 
 void compute_gravitational_force_quad(Quad* qt, body* b){
 	if(is_leaf(qt) && qt->body != NULL){
 		if(qt->body != b){
-			/*double dx =  b->px - qt->body->px ;
-			double dy =  b->py - qt->body->py ;
-			double d  =  sqrt(dx*dx + dy*dy);
-			    b->fx += (G * b->mass * qt->body->mass/ (d*d+(C*C)))*(dx/d); 
-    			b->fy += (G * b->mass * qt->body->mass/ (d*d+(C*C)))*(dy/d);*/
-			compute_gravitational_force(qt->body, b);
-
-    			return;
+			double dx = qt->body->px - b->px;
+			double dy = qt->body->py - b->py;
+			double d = sqrt((dx*dx) + (dy*dy));
+			b->fx += (G * b->mass * qt->body->mass/ (d*d+(C*C)))*(dx/d); 
+    		b->fy += (G * b->mass * qt->body->mass/ (d*d+(C*C)))*(dy/d);
+    		return;
 		}
 	}
-	else {
+
+	if(!is_leaf(qt)){
 		double dist = compute_distance(qt->center_mass, b);
-		double s = WINDOW_WIDTH*(0.5+0.5*(qt->region.bottomRight.x/ 2.83800e+06)) - 
-				   WINDOW_WIDTH*(0.5+0.5*(qt->region.topLeft.x/ 2.83800e+06));/*TODOOOOOOO*/
-		/*printf("%f\n", dist);
-		printf("%f\n", s);
-		wait_milliseconds(1000);*/
-	
+		double s = (qt->region.bottomRight.y - qt->region.topLeft.y);
+
 		if(s < (dist / 2)){
-			/*printf("je rentre ici\n");*/
 				double dx = qt->center_mass.x - b->px;
 				double dy = qt->center_mass.y - b->py;
-				double d  =  sqrt(dx*dx + dy*dy);
-			    b->fx += (G * b->mass * qt->mass/ (d*d+(C*C)))*(dx/d); 
-    			b->fy += (G * b->mass * qt->mass/ (d*d+(C*C)))*(dy/d); 
+
+			    b->fx += (G * b->mass * qt->mass/ (dist*dist+(C*C)))*(dx/dist); 
+    			b->fy += (G * b->mass * qt->mass/ (dist*dist+(C*C)))*(dy/dist); 
 		}
 		else {
 			compute_gravitational_force_quad(qt->quad_NW, b);
