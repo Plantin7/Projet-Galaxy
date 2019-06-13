@@ -22,7 +22,11 @@ int main(int argc, char* argv[]){
     Region region = create_region(create_point(-new_galaxy->width_region, -new_galaxy->width_region), 
                                   create_point(new_galaxy->width_region, new_galaxy->width_region));
     Quad* new_quad;
+    int switchMode = 0;
     while (1) {
+        MLV_Button_state state = MLV_NONE;
+        MLV_Keyboard_button keyboard_button = MLV_NONE;
+        MLV_get_event(&keyboard_button, NULL, NULL, NULL, NULL, NULL, NULL, NULL, &state);
         new_quad = create_quad(region);
     
         for (int i = 0; i < new_galaxy->number_body; i++){
@@ -37,8 +41,16 @@ int main(int argc, char* argv[]){
             compute_position(new_galaxy->body[i], dt);
         }
         draw_black_filled_rectangle();
-        /*draw_galaxy(new_galaxy);*/
-        draw_whole_quadtree(new_quad, 2.83800e+06);
+        if(keyboard_button == MLV_KEYBOARD_SPACE && state == MLV_RELEASED){
+            switchMode = switchMode == 0 ? 1 : 0;
+        }
+
+        if(switchMode == 0){
+          draw_galaxy(new_galaxy);
+        }
+        else {
+            draw_whole_quadtree(new_quad, new_galaxy->width_region);
+        }
         update_window();
         free_quad(new_quad);
 
