@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <time.h>
 
 #include "../header/bodies.h"
 #include "../header/graphic.h"
@@ -17,36 +18,11 @@ int main(int argc, char* argv[]){
     galaxy* new_galaxy = galaxy_import(argv[1]);
 
     double t = 0.0;
-    /*while (1) {
-    	body* tmp = new_galaxy->body;
-    	while (tmp != NULL){
-    		tmp->fx = 0.0;
-    		tmp->fy = 0.0;
-
-    		body* next_body = tmp;
-    		while (next_body->next != NULL){
-    			if (tmp != next_body){
-    				compute_gravitational_force(tmp, next_body->next);
-    			}
-    			next_body = next_body->next;
-    		}
-    		compute_position (tmp, dt);
-    		tmp = tmp->next;
-    	}
-    	printf("Current %d------%lf %lf %lf %lf %lf \n", i, current->px, current->py, current->vx, current->vy, current->mass);
-         draw 
-        draw_black_filled_rectangle();
-        draw_galaxy(new_galaxy);
-        update_window();
-
-         increment time 
-        t += dt;
-        wait_milliseconds(10);
-    }*/
-
+    /*clock_t start_t, end_t;
+    double total_t;*/
 
     while (1) {
-
+        /*start_t = clock();*/
         for (int i = 0; i < new_galaxy->number_body; i++){
             new_galaxy->body[i]->fx = 0.0;
             new_galaxy->body[i]->fy = 0.0;
@@ -62,11 +38,14 @@ int main(int argc, char* argv[]){
         draw_galaxy(new_galaxy);
         update_window();
 
+        /*end_t = clock();
+        total_t = (double)(end_t - start_t)/CLOCKS_PER_SEC;
+        printf("%f\n", total_t);*/
+
         /* increment time */
         t += dt;
         wait_milliseconds(10);
     }
-    printf("Je sors\n");
     free_galaxy(new_galaxy);
     free_window();
 

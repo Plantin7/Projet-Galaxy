@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <time.h>
 
 #include "../header/bodies.h"
 #include "../header/graphic.h"
@@ -23,10 +24,19 @@ int main(int argc, char* argv[]){
                                   create_point(new_galaxy->width_region, new_galaxy->width_region));
     Quad* new_quad;
     int switchMode = 0;
+
+
+    /*Used for calculate calculation time
+    clock_t start_t, end_t;
+    double total_t;
+    */
+
     while (1) {
+        /*start_t = clock();*/
         MLV_Button_state state = MLV_NONE;
         MLV_Keyboard_button keyboard_button = MLV_NONE;
         MLV_get_event(&keyboard_button, NULL, NULL, NULL, NULL, NULL, NULL, NULL, &state);
+        
         new_quad = create_quad(region);
     
         for (int i = 0; i < new_galaxy->number_body; i++){
@@ -53,6 +63,9 @@ int main(int argc, char* argv[]){
         }
         update_window();
         free_quad(new_quad);
+        /*end_t = clock();
+        total_t = (double)(end_t - start_t)/CLOCKS_PER_SEC;
+        printf("%f\n", total_t);*/
 
         /* increment time */
         t += dt;
