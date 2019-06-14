@@ -13,11 +13,6 @@ void draw_body(body *B, int width_region) {
 }
 
 void draw_galaxy(galaxy* new_galaxy){
-	/*body* current = new_galaxy->body;
-	while(current != NULL){
-		draw_body(current, new_galaxy->width_region / 2);
-		current = current->next;
-	}*/
 	for (int i = 0; i < new_galaxy->number_body; i++){
         draw_body(new_galaxy->body[i], new_galaxy->width_region / 2);
     }
